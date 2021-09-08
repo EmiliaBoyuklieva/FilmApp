@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MovieLottoDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="MovieLottoDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Films" EntityType="MovieLottoDBModel.Film" />
+    <EntitySet Name="Genres" EntityType="MovieLottoDBModel.Genre" />
+    <EntitySet Name="Lotaries" EntityType="MovieLottoDBModel.Lotary" />
+    <EntitySet Name="LotaryRoles" EntityType="MovieLottoDBModel.LotaryRole" />
+    <EntitySet Name="Users" EntityType="MovieLottoDBModel.User" />
+    <EntitySet Name="sysdiagrams" EntityType="MovieLottoDBModel.sysdiagram" />
+    <AssociationSet Name="FK_Film_Genre" Association="MovieLottoDBModel.FK_Film_Genre">
+      <End Role="Genre" EntitySet="Genres" />
+      <End Role="Film" EntitySet="Films" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Film_User" Association="MovieLottoDBModel.FK_Film_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Film" EntitySet="Films" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LotaryRole_Film" Association="MovieLottoDBModel.FK_LotaryRole_Film">
+      <End Role="Film" EntitySet="Films" />
+      <End Role="LotaryRole" EntitySet="LotaryRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Lotary_Genre" Association="MovieLottoDBModel.FK_Lotary_Genre">
+      <End Role="Genre" EntitySet="Genres" />
+      <End Role="Lotary" EntitySet="Lotaries" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LotaryRole_Lotary" Association="MovieLottoDBModel.FK_LotaryRole_Lotary">
+      <End Role="Lotary" EntitySet="Lotaries" />
+      <End Role="LotaryRole" EntitySet="LotaryRoles" />
+    </AssociationSet>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(MovieLottoDBModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(MovieLottoDBModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+  </EntityContainer>
+  <EntityType Name="Film">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FilmName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Year" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Size" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="GenreId" Type="Int32" Nullable="false" />
+    <Property Name="Rating" Type="Int32" Nullable="false" />
+    <Property Name="AddDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="DateWatch" Type="DateTime" Precision="0" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Genre" Relationship="MovieLottoDBModel.FK_Film_Genre" FromRole="Film" ToRole="Genre" />
+    <NavigationProperty Name="User" Relationship="MovieLottoDBModel.FK_Film_User" FromRole="Film" ToRole="User" />
+    <NavigationProperty Name="LotaryRoles" Relationship="MovieLottoDBModel.FK_LotaryRole_Film" FromRole="Film" ToRole="LotaryRole" />
+  </EntityType>
+  <EntityType Name="Genre">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Genre1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Films" Relationship="MovieLottoDBModel.FK_Film_Genre" FromRole="Genre" ToRole="Film" />
+    <NavigationProperty Name="Lotaries" Relationship="MovieLottoDBModel.FK_Lotary_Genre" FromRole="Genre" ToRole="Lotary" />
+  </EntityType>
+  <EntityType Name="Lotary">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DateLotary" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="GanreId" Type="Int32" />
+    <NavigationProperty Name="Genre" Relationship="MovieLottoDBModel.FK_Lotary_Genre" FromRole="Lotary" ToRole="Genre" />
+    <NavigationProperty Name="LotaryRoles" Relationship="MovieLottoDBModel.FK_LotaryRole_Lotary" FromRole="Lotary" ToRole="LotaryRole" />
+  </EntityType>
+  <EntityType Name="LotaryRole">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FilmId" Type="Int32" Nullable="false" />
+    <Property Name="IsWinner" Type="Boolean" Nullable="false" />
+    <Property Name="LotaryId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Film" Relationship="MovieLottoDBModel.FK_LotaryRole_Film" FromRole="LotaryRole" ToRole="Film" />
+    <NavigationProperty Name="Lotary" Relationship="MovieLottoDBModel.FK_LotaryRole_Lotary" FromRole="LotaryRole" ToRole="Lotary" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Age" Type="Int32" Nullable="false" />
+    <Property Name="Gender" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="true" />
+    <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Role" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Films" Relationship="MovieLottoDBModel.FK_Film_User" FromRole="User" ToRole="Film" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="name" />
+      <PropertyRef Name="principal_id" />
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Film_Genre">
+    <End Type="MovieLottoDBModel.Genre" Role="Genre" Multiplicity="1" />
+    <End Type="MovieLottoDBModel.Film" Role="Film" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Genre">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Film">
+        <PropertyRef Name="GenreId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Film_User">
+    <End Type="MovieLottoDBModel.User" Role="User" Multiplicity="1" />
+    <End Type="MovieLottoDBModel.Film" Role="Film" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Film">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LotaryRole_Film">
+    <End Type="MovieLottoDBModel.Film" Role="Film" Multiplicity="1" />
+    <End Type="MovieLottoDBModel.LotaryRole" Role="LotaryRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Film">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LotaryRole">
+        <PropertyRef Name="FilmId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Lotary_Genre">
+    <End Type="MovieLottoDBModel.Genre" Role="Genre" Multiplicity="0..1" />
+    <End Type="MovieLottoDBModel.Lotary" Role="Lotary" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Genre">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Lotary">
+        <PropertyRef Name="GanreId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LotaryRole_Lotary">
+    <End Type="MovieLottoDBModel.Lotary" Role="Lotary" Multiplicity="1" />
+    <End Type="MovieLottoDBModel.LotaryRole" Role="LotaryRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Lotary">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LotaryRole">
+        <PropertyRef Name="LotaryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+</Schema>
